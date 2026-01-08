@@ -1,0 +1,8 @@
+{
+  "name": "MindBridge",
+  "description": "A compassionate community for anonymous sharing, peer support, and guided healing. Includes AI-powered study planning and mental health analysis.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
