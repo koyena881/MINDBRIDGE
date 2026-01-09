@@ -14,6 +14,7 @@ const Profile: React.FC<ProfileProps> = ({ user, onUpdateUser, onDeleteAccount, 
   const [avatarSeed, setAvatarSeed] = useState(user.avatar || user.name);
   const [isSaving, setIsSaving] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Update avatar preview when name changes if user hasn't set a custom seed
   useEffect(() => {
@@ -44,9 +45,11 @@ const Profile: React.FC<ProfileProps> = ({ user, onUpdateUser, onDeleteAccount, 
   };
 
   const handleDeleteClick = () => {
-    if (window.confirm("Are you absolutely sure? This action cannot be undone and your account data will be permanently lost.")) {
-      onDeleteAccount();
-    }
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = () => {
+    onDeleteAccount();
   };
 
   return (
@@ -181,6 +184,35 @@ const Profile: React.FC<ProfileProps> = ({ user, onUpdateUser, onDeleteAccount, 
           </div>
         </form>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="bg-white rounded-[2.5rem] p-10 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-300 border border-slate-100">
+            <div className="w-16 h-16 bg-red-100 text-red-500 rounded-2xl flex items-center justify-center mb-6">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            </div>
+            <h3 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">Delete Account?</h3>
+            <p className="text-slate-500 font-medium mb-8 leading-relaxed">
+              This action is <span className="text-red-500 font-bold">permanent</span>. All your healing points, mood logs, and personal data will be wiped from this device immediately.
+            </p>
+            <div className="flex flex-col gap-3">
+               <button 
+                  onClick={confirmDelete}
+                  className="w-full py-4 bg-red-500 hover:bg-red-600 text-white font-black rounded-2xl shadow-xl shadow-red-200 transition-all active:scale-95"
+                >
+                  Yes, Delete Everything
+                </button>
+                <button 
+                  onClick={() => setShowDeleteModal(false)}
+                  className="w-full py-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-black rounded-2xl transition-all"
+                >
+                  Cancel
+                </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
